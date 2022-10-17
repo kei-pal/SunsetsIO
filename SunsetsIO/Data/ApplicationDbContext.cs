@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SunsetsIO.Models;
 
 namespace SunsetsIO.Data
 {
@@ -9,5 +10,6 @@ namespace SunsetsIO.Data
             : base(options)
         {
         }
+        public DbSet<SunsetsIO.Models.Rating> Rating { get; set; }
     }
 }
