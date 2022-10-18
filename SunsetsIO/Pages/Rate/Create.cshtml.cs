@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,11 +13,13 @@ namespace SunsetsIO.Pages.Rate
 {
     public class CreateModel : PageModel
     {
-        private readonly SunsetsIO.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public CreateModel(SunsetsIO.Data.ApplicationDbContext context)
+        public CreateModel(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult OnGet()
@@ -32,7 +35,9 @@ namespace SunsetsIO.Pages.Rate
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid)
+            var user = _userManager.GetUserAsync(User).Result;
+            Rating.UserId = user.Id;
+            if (!ModelState.IsValid)
             {
                 return Page();
             }

@@ -9,9 +9,11 @@ namespace SunsetsIO.Models
         public int Stars { get; set; }
         [ForeignKey("User")]
         [MaxLength(450)]
-        public string UserId { get; set; }
-        public User User { get; set; }
-        //TODO: add location of rating
+        public string? UserId { get; set; }
+        
+        // TODO: figure out why below only works if declared nullable
+        public User? User { get; set; }
+        // TODO: add location of rating
         // public double Latitude { get; set; }
         // public double Longitude { get; set; }
     }
