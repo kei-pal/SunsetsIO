@@ -19,6 +19,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.Rating[0].User)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating[0].Longitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating[0].Latitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating[0].DateTimeRated)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -30,6 +39,15 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.User.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Longitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Latitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTimeRated)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
