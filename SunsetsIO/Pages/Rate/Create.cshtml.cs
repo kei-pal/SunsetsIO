@@ -29,7 +29,6 @@ namespace SunsetsIO.Pages.Rate
         }
 
         [BindProperty]
-        [HiddenInput]
         public Rating Rating { get; set; }
         
 

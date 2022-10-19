@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using SunsetsIO.Data;
 using SunsetsIO.Middleware;
 using SunsetsIO.Models;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,26 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// Custom code to force global decimal point
+var defaultDateCulture = "en-US";
+var ci = new CultureInfo(defaultDateCulture);
+ci.NumberFormat.NumberDecimalSeparator = ".";
+ci.NumberFormat.CurrencyDecimalSeparator = ".";
+
+// Custom configure the Localization middleware
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture(ci),
+    SupportedCultures = new List<CultureInfo>
+    {
+        ci,
+    },
+    SupportedUICultures = new List<CultureInfo>
+    {
+        ci,
+    }
+});
 
 app.UseRouting();
 
