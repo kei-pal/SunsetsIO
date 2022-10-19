@@ -11,6 +11,10 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <div class="form-group">
+            <button onclick="getLocation()">Get Location</button>
+            <p id="userLocation"></p>
+        </div>
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -29,6 +33,25 @@
     <a asp-page="Index">Back to List</a>
 </div>
 
+
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        var x = document.getElementById("userLocation");
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            x.innerHTML = "Latitude: " + position.coords.latitude +
+                "<br>Longitude: " + position.coords.longitude;
+        }
+    </script>
+
 }
