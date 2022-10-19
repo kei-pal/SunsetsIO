@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SunsetsIO.Data;
+using SunsetsIO.Middleware;
 using SunsetsIO.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +15,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddRazorPages();
+builder.Services.AddSingleton<
+    IAuthorizationMiddlewareResultHandler, CustomAuthorizationMiddlewareResultHandler>();
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeFolder("/Rate");
+});
 
 var app = builder.Build();
 
