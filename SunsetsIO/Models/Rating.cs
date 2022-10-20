@@ -6,6 +6,7 @@ namespace SunsetsIO.Models
     public class Rating
     {
         public int Id { get; set; }
+        [Range(1,5)]
         public int Stars { get; set; }
         [ForeignKey("User")]
         [MaxLength(450)]
