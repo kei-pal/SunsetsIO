@@ -14,7 +14,6 @@ namespace SunsetsIO.Models
         
         // TODO: figure out why below only works if declared nullable
         public User? User { get; set; }
-        // TODO: add location of rating
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public DateTime DateTimeRated { get; set; }
