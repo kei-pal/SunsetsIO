@@ -12,9 +12,9 @@ namespace SunsetsIO.Pages.Rate
 {
     public class DetailsModel : PageModel
     {
-        private readonly SunsetsIO.Data.ApplicationDbContext _context;
+        private readonly SunsetsIO.Data.AppDbContext _context;
 
-        public DetailsModel(SunsetsIO.Data.ApplicationDbContext context)
+        public DetailsModel(SunsetsIO.Data.AppDbContext context)
         {
             _context = context;
         }

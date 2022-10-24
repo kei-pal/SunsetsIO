@@ -12,9 +12,9 @@ namespace SunsetsIO.Pages.Rate
 {
     public class DeleteModel : PageModel
     {
-        private readonly SunsetsIO.Data.ApplicationDbContext _context;
+        private readonly SunsetsIO.Data.AppDbContext _context;
 
-        public DeleteModel(SunsetsIO.Data.ApplicationDbContext context)
+        public DeleteModel(SunsetsIO.Data.AppDbContext context)
         {
             _context = context;
         }

@@ -13,10 +13,10 @@ namespace SunsetsIO.Pages.Rate
 {
     public class IndexModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
         private readonly UserManager<User> _userManager;
 
-        public IndexModel(ApplicationDbContext context, UserManager<User> userManager)
+        public IndexModel(AppDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;

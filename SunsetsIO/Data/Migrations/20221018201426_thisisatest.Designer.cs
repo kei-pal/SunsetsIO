@@ -11,7 +11,7 @@ using SunsetsIO.Data;
 
 namespace SunsetsIO.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20221018201426_thisisatest")]
     partial class thisisatest
     {

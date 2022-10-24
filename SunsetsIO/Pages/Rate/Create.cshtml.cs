@@ -13,10 +13,10 @@ namespace SunsetsIO.Pages.Rate
 {
     public class CreateModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
         private readonly UserManager<User> _userManager;
 
-        public CreateModel(ApplicationDbContext context, UserManager<User> userManager)
+        public CreateModel(AppDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;

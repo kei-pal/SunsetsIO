@@ -13,9 +13,9 @@ namespace SunsetsIO.Pages.Rate
 {
     public class EditModel : PageModel
     {
-        private readonly SunsetsIO.Data.ApplicationDbContext _context;
+        private readonly SunsetsIO.Data.AppDbContext _context;
 
-        public EditModel(SunsetsIO.Data.ApplicationDbContext context)
+        public EditModel(SunsetsIO.Data.AppDbContext context)
         {
             _context = context;
         }
