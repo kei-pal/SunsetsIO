@@ -17,5 +17,6 @@ namespace SunsetsIO.Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public DateTime DateTimeRated { get; set; }
+        
     }
 }
