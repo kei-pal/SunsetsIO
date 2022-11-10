@@ -17,11 +17,13 @@ namespace SunsetsIO.Pages.Rate
     {
         private readonly AppDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _config;
 
-        public CreateModel(AppDbContext context, UserManager<User> userManager)
+        public CreateModel(AppDbContext context, UserManager<User> userManager, IConfiguration config)
         {
             _context = context;
             _userManager = userManager;
+            _config = config;
         }
 
         public IActionResult OnGet()
@@ -32,13 +34,19 @@ namespace SunsetsIO.Pages.Rate
 
         [BindProperty]
         public Rating Rating { get; set; }
-        
-
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
             var user = _userManager.GetUserAsync(User).Result;
             Rating.UserId = user.Id;
+            Rating.DateTimeRated = DateTime.UtcNow;
+
+            WeatherForecastController controller = new (_context, _config);
+
+            var localWeatherIdAndSunset = await controller.GetLocalWeatherIdandSunset(Rating.Latitude, Rating.Longitude);
+
+            Rating.LocalWeatherId = localWeatherIdAndSunset.LocalWeatherId;
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -48,15 +56,6 @@ namespace SunsetsIO.Pages.Rate
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
-        }
-
-        public async Task<LocalWeather> GetWeatherForecastAsync(double latitude, double longitude)
-        {
-            var client = new HttpClient();
-            var response = await client.GetAsync($"https://api.openweathermap.org/data/2.5/forecast?lat={latitude}&lon={longitude}&appid={Environment.GetEnvironmentVariable("OPEN_WEATHER_MAP_API_KEY")}");
-            var responseString = await response.Content.ReadAsStringAsync();
-            var weatherForecast = JsonConvert.DeserializeObject<LocalWeather>(responseString);
-            return weatherForecast;
         }
     }
 }

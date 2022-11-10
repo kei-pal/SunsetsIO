@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using SunsetsIO.Data;
 using SunsetsIO.Models;
@@ -19,6 +20,12 @@ namespace SunsetsIO.UnitTests.Pages
 {
     public class RateTests
     {
+
+        private readonly IConfiguration _config;
+        public RateTests(IConfiguration config)
+        {
+            _config = config;
+        }
         [Fact]
         public async Task OnPost_ValidModel_ReturnRedirectToIndex()
         {
@@ -54,7 +61,7 @@ namespace SunsetsIO.UnitTests.Pages
             {
                 ViewData = viewData
             };
-            var model = new CreateModel(_dbContext, mockedUserManager.Object)
+            var model = new CreateModel(_dbContext, mockedUserManager.Object, _config)
             {
                 Rating = new Rating(),
                 PageContext = pageContext
@@ -101,7 +108,7 @@ namespace SunsetsIO.UnitTests.Pages
             {
                 ViewData = viewData
             };
-            var model = new CreateModel(_dbContext, mockedUserManager.Object)
+            var model = new CreateModel(_dbContext, mockedUserManager.Object, _config)
             {
                 Rating = new Rating(),
                 PageContext = pageContext

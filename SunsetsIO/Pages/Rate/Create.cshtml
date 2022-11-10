@@ -14,7 +14,7 @@
         <form method="post">
             <input type="hidden" asp-for="Rating.Longitude" id="longitude"/>
             <input type="hidden" asp-for="Rating.Latitude" id="latitude" />
-            <input type="hidden" asp-for="Rating.DateTimeRated" value="@DateTime.Now" class="form-control" />
+            @*<input type="hidden" asp-for="Rating.DateTimeRated" value="@DateTime.Now" class="form-control" />*@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Rating.Stars" class="control-label"></label>
@@ -45,7 +45,7 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(setPosition);
             } else {
-                // add proper error handling
+                // TODO: add proper error handling
             }
         }
 
