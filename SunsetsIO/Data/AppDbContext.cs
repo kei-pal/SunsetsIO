@@ -6,10 +6,15 @@ namespace SunsetsIO.Data
 {
     public class AppDbContext : IdentityDbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
+        protected readonly IConfiguration Configuration;
+
+        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration)
             : base(options)
         {
+            Configuration = configuration;
         }
-        public DbSet<SunsetsIO.Models.Rating> Rating { get; set; }
+        
+        public DbSet<Rating> Rating { get; set; }
+        public DbSet<LocalWeather> LocalWeather { get; set; }
     }
 }

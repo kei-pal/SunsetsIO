@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace SunsetsIO.Models
 {
@@ -18,5 +19,8 @@ namespace SunsetsIO.Models
         public double Longitude { get; set; }
         public DateTime DateTimeRated { get; set; }
         
+        public int LocalWeatherId { get; set; }
+        public LocalWeather LocalWeather { get; set; } = default!;
+
     }
 }
