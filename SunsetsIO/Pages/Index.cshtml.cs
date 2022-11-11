@@ -38,11 +38,14 @@ namespace SunsetsIO.Pages
                 .OrderByDescending(r => r.DateTimeRatedUtc)
                 .FirstOrDefault();
 
+            var lastUserRatingDate = lastUserRating
+                .DateTimeRatedUtc
+                .AddSeconds(lastUserRating.LocalWeather.TimezoneOffsetSecs)
+                .Date;
+
             if (lastUserRating is not null) // then check if user has rated within the last 24 hours
             {
-                var lastRatingDate = lastUserRating.DateTimeRatedUtc;
-                var lastRatingDatePlus24Hours = lastRatingDate.AddHours(24);
-                if (DateTime.UtcNow < lastRatingDatePlus24Hours)
+                if (DateTime.UtcNow.Date == lastUserRatingDate)
                 {
                     return RedirectToPage("./Result", new { id = lastUserRating.Id }); // redirect to results pagee of new id
                 }
