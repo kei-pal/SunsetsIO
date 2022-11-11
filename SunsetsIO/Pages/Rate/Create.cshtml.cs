@@ -33,14 +33,18 @@ namespace SunsetsIO.Pages.Rate
             return Page();
         }
 
-        public class UserLocation
+        public class AjaxInput
         {
-            public string? Latitude { get; set; }
-            public string? Longitude { get; set; }
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
         }
-        public IActionResult OnPostAjax([FromBody] UserLocation userLocation)
+        
+        public async Task<IActionResult> OnPostAjax([FromBody] AjaxInput ajaxIn)
         {
-            return new JsonResult($"my result: Long:{userLocation.Longitude} Lat:{userLocation.Latitude}");
+            WeatherForecastController controller = new(_context, _config);
+            var localWeather = await controller.GetLocalWeather(ajaxIn.Latitude, ajaxIn.Longitude);
+            
+            return new JsonResult($"my result: Sunset:{localWeather.SunsetUtc} Lat:{localWeather.TimezoneOffsetSecs}");
         }
 
         [BindProperty]
