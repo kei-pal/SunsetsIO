@@ -4,7 +4,76 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <input type="hidden" asp-for="Rating.Longitude" id="longitude" />
+            <input type="hidden" asp-for="Rating.Latitude" id="latitude" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Rating.Stars" class="control-label"></label>
+                <input asp-for="Rating.Stars" class="form-control" />
+                <span asp-validation-for="Rating.Stars" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" id="create" disabled />
+            </div>
+        </form>
+    </div>
 </div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            getLocation();
+        });
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(setPosition);
+            } else {
+                // TODO: add proper error handling
+            }
+        }
+
+        function setPosition(position) {
+            document.getElementById("latitude").value = position.coords.latitude;
+            document.getElementById("longitude").value = position.coords.longitude;
+            document.getElementById("create").disabled = false;
+            getSunsetTime();
+        }
+
+        function getSunsetTime() {
+            var latitude = document.getElementById("latitude").value;
+            var longitude = document.getElementById("longitude").value;
+            var url = "@Url.Page("/Index")?handler=Ajax";
+            $.ajax({
+                url: url,
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                contentType: "application/json; charset=utf-8",
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({ latitude: latitude, longitude: longitude }),
+                success: function (data) {
+                    console.log(data);
+                    //var sunsetTime = data.results.sunset;
+                    //var sunsetTimeUtc = new Date(sunsetTime).toUTCString();
+                    //document.getElementById("Rating_DateTimeRatedUtc").value = sunsetTimeUtc;
+                },
+                error: function (xhr, status, error) {
+                    console.log("fuck");
+                }
+            })
+        }
+    </script>
+
+}
