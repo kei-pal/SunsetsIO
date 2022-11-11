@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using SunsetsIO.Controllers;
 using SunsetsIO.Data;
@@ -30,6 +31,16 @@ namespace SunsetsIO.Pages.Rate
         {
             ViewData["UserId"] = new SelectList(_context.Set<User>(), "Id", "Id");
             return Page();
+        }
+
+        public class UserLocation
+        {
+            public string? Latitude { get; set; }
+            public string? Longitude { get; set; }
+        }
+        public IActionResult OnPostAjax([FromBody] UserLocation userLocation)
+        {
+            return new JsonResult($"my result: Long:{userLocation.Longitude} Lat:{userLocation.Latitude}");
         }
 
         [BindProperty]

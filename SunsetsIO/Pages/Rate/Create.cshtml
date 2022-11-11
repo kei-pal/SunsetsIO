@@ -53,6 +53,30 @@
             document.getElementById("latitude").value = position.coords.latitude;
             document.getElementById("longitude").value = position.coords.longitude;
             document.getElementById("create").disabled = false;
+            getSunsetTime();
+        }
+
+        function getSunsetTime() {
+            var latitude = document.getElementById("latitude").value;
+            var longitude = document.getElementById("longitude").value;
+            var url = "@Url.Page("/Create")?handler=Ajax";
+            $.ajax({
+                url: url,
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                contentType: "application/json; charset=utf-8",
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({ latitude: latitude, longitude: longitude }),
+                success: function (data) {
+                    console.log(data);
+                    //var sunsetTime = data.results.sunset;
+                    //var sunsetTimeUtc = new Date(sunsetTime).toUTCString();
+                    //document.getElementById("Rating_DateTimeRatedUtc").value = sunsetTimeUtc;
+                },
+                error: function (xhr, status, error) {
+                    console.log("fuck");
+                }
+            })
         }
     </script>
 

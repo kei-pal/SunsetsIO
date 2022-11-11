@@ -52,11 +52,6 @@ namespace SunsetsIO.Controllers
             return localWeather;
         }
 
-        //public bool CheckIfLocalWeatherExistsTodayAsync(double reducedLat, double reducedLong)
-        //{
-        //    return _context.LocalWeather.Any(lw => lw.Latitude == reducedLat && lw.Longitude == reducedLong && lw.DateTimeUtc == DateTime.Today);
-        //}
-
         public async Task<JsonDocument> GetLocalWeatherAsync(double latitude, double longitude)
         {
             var client = new HttpClient();
