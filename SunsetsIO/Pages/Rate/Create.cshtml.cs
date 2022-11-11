@@ -43,8 +43,10 @@ namespace SunsetsIO.Pages.Rate
         {
             WeatherForecastController controller = new(_context, _config);
             var localWeather = await controller.GetLocalWeather(ajaxIn.Latitude, ajaxIn.Longitude);
+
+            var sunsetOffset = localWeather.SunsetUtc.AddSeconds(localWeather.TimezoneOffsetSecs);
             
-            return new JsonResult($"my result: Sunset:{localWeather.SunsetUtc} Lat:{localWeather.TimezoneOffsetSecs}");
+            return new JsonResult(sunsetOffset);
         }
 
         [BindProperty]
