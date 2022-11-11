@@ -17,7 +17,7 @@ namespace SunsetsIO.Controllers
             _context = context;
             _config = config;
         }
-        public async Task<LocalWeatherViewModel> GetLocalWeatherIdandSunset(double latitude, double longitude)
+        public async Task<LocalWeather> GetLocalWeather(double latitude, double longitude)
         {
             double reducedLat = Math.Round(latitude, 1);
             double reducedLong = Math.Round(longitude, 1);
@@ -31,28 +31,25 @@ namespace SunsetsIO.Controllers
             {
                 var localWeatherData = await GetLocalWeatherAsync(reducedLat, reducedLong);
 
-                int SunsetUtcEpoch = localWeatherData.RootElement.GetProperty("city").GetProperty("sunset").GetInt32();
-                DateTime sunsetUtc = DateTimeOffset.FromUnixTimeSeconds(SunsetUtcEpoch).UtcDateTime;
+                int sunsetUtcEpoch = localWeatherData.RootElement.GetProperty("city").GetProperty("sunset").GetInt32();
+                DateTime sunsetUtc = DateTimeOffset.FromUnixTimeSeconds(sunsetUtcEpoch).UtcDateTime;
+                
+                int timezoneOffsetSecs = localWeatherData.RootElement.GetProperty("city").GetProperty("timezone").GetInt32();
 
                 localWeather = new LocalWeather()
                 {
                     Latitude = reducedLat,
                     Longitude = reducedLong,
                     Payload = localWeatherData,
-                    SunsetUtc = sunsetUtc
+                    SunsetUtc = sunsetUtc,
+                    TimezoneOffsetSecs = timezoneOffsetSecs
                 };
                 
                 _context.LocalWeather.Add(localWeather);
                 await _context.SaveChangesAsync();
             }
 
-            LocalWeatherViewModel localWeatherIdandSunset = new ()
-            {
-                LocalWeatherId = localWeather.Id,
-                SunsetUtc = localWeather.SunsetUtc
-            };
-
-            return localWeatherIdandSunset;
+            return localWeather;
         }
 
         //public bool CheckIfLocalWeatherExistsTodayAsync(double reducedLat, double reducedLong)

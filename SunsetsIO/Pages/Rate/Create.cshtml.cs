@@ -39,23 +39,36 @@ namespace SunsetsIO.Pages.Rate
         {
             var user = _userManager.GetUserAsync(User).Result;
             Rating.UserId = user.Id;
-            Rating.DateTimeRated = DateTime.UtcNow;
 
             WeatherForecastController controller = new (_context, _config);
 
-            var localWeatherIdAndSunset = await controller.GetLocalWeatherIdandSunset(Rating.Latitude, Rating.Longitude);
+            var localWeather = await controller.GetLocalWeather(Rating.Latitude, Rating.Longitude);
 
-            Rating.LocalWeatherId = localWeatherIdAndSunset.LocalWeatherId;
+            Rating.LocalWeatherId = localWeather.Id;
 
-            if (!ModelState.IsValid)
+            //DateTime dateTimeRatedUtc = DateTime.UtcNow;
+            //DateTime ratingDateTimeOffset = DateTime.UtcNow.AddSeconds(localWeather.TimezoneOffsetSecs);
+            Rating.DateTimeRatedUtc = DateTime.UtcNow;
+            DateTime ratingDateTimeOffset = Rating.DateTimeRatedUtc.AddSeconds(localWeather.TimezoneOffsetSecs);
+            DateTime localWeatherDateTimeOffset = localWeather.SunsetUtc.AddSeconds(localWeather.TimezoneOffsetSecs);
+
+            // need to adapt the below to suit the date of the user and not UTC
+            if (!_context.Rating.Any(r => r.UserId == user.Id && ratingDateTimeOffset.Date == localWeatherDateTimeOffset.Date))
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Page();
+                }
+
+                _context.Rating.Add(Rating);
+                await _context.SaveChangesAsync();
+
+                return RedirectToPage("./Index");
+            }
+            else
             {
                 return Page();
             }
-
-            _context.Rating.Add(Rating);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
         }
     }
 }

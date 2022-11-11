@@ -16,7 +16,7 @@ namespace SunsetsIO.Models
         public User? User { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public DateTime DateTimeRated { get; set; }
+        public DateTime DateTimeRatedUtc { get; set; }
         
         public int LocalWeatherId { get; set; }
         public LocalWeather? LocalWeather { get; set; }
