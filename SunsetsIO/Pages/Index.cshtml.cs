@@ -31,6 +31,23 @@ namespace SunsetsIO.Pages
 
         public IActionResult OnGet()
         {
+            // check if user has rated and redirect to result page if so
+            var user = _userManager.GetUserAsync(User).Result;
+            var lastUserRating = _context.Rating
+                .Where(r => r.UserId == user.Id)
+                .OrderByDescending(r => r.DateTimeRatedUtc)
+                .FirstOrDefault();
+
+            if (lastUserRating is not null) // then check if user has rated within the last 24 hours
+            {
+                var lastRatingDate = lastUserRating.DateTimeRatedUtc;
+                var lastRatingDatePlus24Hours = lastRatingDate.AddHours(24);
+                if (DateTime.UtcNow < lastRatingDatePlus24Hours)
+                {
+                    return RedirectToPage("./Result", new { id = lastUserRating.Id }); // redirect to results pagee of new id
+                }
+            }
+
             ViewData["UserId"] = new SelectList(_context.Set<User>(), "Id", "Id");
             return Page();
         }
@@ -82,7 +99,7 @@ namespace SunsetsIO.Pages
                 _context.Rating.Add(Rating);
                 await _context.SaveChangesAsync();
 
-                return RedirectToPage("./Index");
+                return RedirectToPage("./Result", new { id = Rating.Id });
             }
             else
             {
