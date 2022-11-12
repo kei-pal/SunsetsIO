@@ -12,21 +12,21 @@
     </div>
     <div  id="sunsetTimer" class="sunsetTimer">
         <div class ="timeRow">
-        <div>
-            <div>
-                <h1 id ="sunsetHours" class="time-block"></h1>
+        <div class="timeCol">
+            <div class="time-block">
+                <h1 id ="sunsetHours" ></h1>
             </div>
             <div>Hours</div>
         </div>
-        <div>
-            <div>
-                <h1 id="sunsetMinutes" class="time-block"></h1>
+        <div class="timeCol">
+            <div class="time-block">
+                <h1 id="sunsetMinutes" ></h1>
             </div>
             <div>Mins</div>
         </div>
-        <div>
-            <div>
-                <h1 id="sunsetSeconds" class="time-block"></h1>
+            <div class="timeCol">
+            <div class="time-block">
+                <h1 id="sunsetSeconds"></h1>
             </div>
             <div>Secs</div>
         </div>
@@ -105,11 +105,11 @@
                     var secondsToToSunset = (sunsetTimeUtc - new Date())/1000;
                     if (Math.sign(secondsToToSunset) < 0) {
                         isPassedSunset = true;
-                        document.getElementById('sunsetTitle').innerHTML = "until sunset";
+                        document.getElementById('sunsetTitle').innerHTML = "since sunset";
                         $("#ratingFormDiv").show();
                     }
                     else {
-                        document.getElementById('sunsetTitle').innerHTML = "since sunset";
+                        document.getElementById('sunsetTitle').innerHTML = "until sunset";
                         isPassedSunset = false;
                     }
                     var HmsToSunset = secondsToHms(Math.abs(secondsToToSunset));
