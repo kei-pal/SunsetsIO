@@ -23,15 +23,17 @@ body {
     height: 100vh;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .loader {
-    border: 16px solid #f3f3f3; /* Light grey */
-    border-top: 16px solid #3498db; /* Blue */
+    display: inline-block;
+    border: 0.13em solid #f3f3f3; /* Light grey */
+    border-top: 0.13em solid #3498db; /* Blue */
     border-radius: 50%;
-    width: 120px;
-    height: 120px;
     animation: spin 1s linear infinite;
+    height: 0.8em;
+    width: 0.8em;
 }
 
 @keyframes spin {
@@ -42,4 +44,24 @@ body {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.parent {
+    border-bottom: 5px solid black;
+}
+
+.time-block {
+    border: 1px solid black;
+}
+
+.timeRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sunsetTimer {
+    display: none;
+    margin-top: 1em;
 }

@@ -3,14 +3,44 @@
 @{
     ViewData["Title"] = "Home page";
 }
-<div class="loader"></div>
+
 <div class="centered">
-<div id="sunsetTimer" style="display:none">
-    <h5 id="sunsetTitle"></h5>
-    <p>
-        <span id="sunsetHours" style="border: 1px solid black"></span>h:<span id="sunsetMinutes" style="border: 1px solid black"></span>m:<span id="sunsetSeconds" style="border: 1px solid black"></span>s
-    </p>
+    <div class="parent">
+        <h1>
+            <span>SunsetsI</span><span><div class="loader child"></div></span>
+        </h1>
+    </div>
+    <div  id="sunsetTimer" class="sunsetTimer">
+        <div class ="timeRow">
+        <div>
+            <div>
+                <h1 id ="sunsetHours" class="time-block"></h1>
+            </div>
+            <div>Hours</div>
+        </div>
+        <div>
+            <div>
+                <h1 id="sunsetMinutes" class="time-block"></h1>
+            </div>
+            <div>Mins</div>
+        </div>
+        <div>
+            <div>
+                <h1 id="sunsetSeconds" class="time-block"></h1>
+            </div>
+            <div>Secs</div>
+        </div>
+        </div>
+        <div>
+            <h5 id="sunsetTitle"></h5>
+        </div>
+        
+    </div>
 </div>
+    
+
+
+
 
 <div class="row" id="ratingFormDiv" style="display:none">
     <div class="col-md-4">
@@ -28,7 +58,6 @@
             </div>
         </form>
     </div>
-</div>
 </div>
 
 @section Scripts {
@@ -76,11 +105,11 @@
                     var secondsToToSunset = (sunsetTimeUtc - new Date())/1000;
                     if (Math.sign(secondsToToSunset) < 0) {
                         isPassedSunset = true;
-                        document.getElementById('sunsetTitle').innerHTML = "Time since sunset";
+                        document.getElementById('sunsetTitle').innerHTML = "until sunset";
                         $("#ratingFormDiv").show();
                     }
                     else {
-                        document.getElementById('sunsetTitle').innerHTML = "Time to sunset";
+                        document.getElementById('sunsetTitle').innerHTML = "since sunset";
                         isPassedSunset = false;
                     }
                     var HmsToSunset = secondsToHms(Math.abs(secondsToToSunset));
