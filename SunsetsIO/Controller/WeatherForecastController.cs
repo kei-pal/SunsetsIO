@@ -25,9 +25,22 @@ namespace SunsetsIO.Controllers
             // TODO: Add time to query
             LocalWeather? localWeather = await _context.LocalWeather
                     .Where(lw => lw.Latitude == reducedLat && lw.Longitude == reducedLong)
+                    .OrderByDescending(lw => lw.SunsetUtc)
                     .FirstOrDefaultAsync();
             
-            if (localWeather is null) // if it doesn't exist
+            bool localWeatherExists = false;
+            if (localWeather is not null)
+            {
+                var localWeatherSunsetOffset = localWeather.SunsetUtc.AddSeconds(localWeather.TimezoneOffsetSecs);
+                var localTimeOffset = DateTime.UtcNow.AddSeconds(localWeather.TimezoneOffsetSecs);
+                
+                if (localWeatherSunsetOffset.Date == localTimeOffset.Date)
+                {
+                    localWeatherExists = true;
+                }
+            }
+            
+            if (localWeather is null || !localWeatherExists) // if it doesn't exist
             {
                 var localWeatherData = await GetLocalWeatherAsync(reducedLat, reducedLong);
 
