@@ -4,9 +4,10 @@
     ViewData["Title"] = "Home page";
 }
 
-<div id="timeToSunset" >Getting Location...</div>
-
 <div class="row" id="ratingFormDiv" style="display:none">
+    <p>
+        <span id="sunsetHours" style="border: 1px solid black"></span>:<span id="sunsetMinutes" style="border: 1px solid black"></span>:<span id="sunsetSeconds" style="border: 1px solid black"></span>
+    </p>
     <div class="col-md-4">
         <form method="post">
             <input type="hidden" asp-for="Rating.Longitude" id="longitude" />
@@ -29,6 +30,10 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
+        var sunsetHours;
+        var sunsetMinutes;
+        var sunsetSeconds;
+        
         $(document).ready(function () {
             getLocation();
         });
@@ -65,11 +70,14 @@
                 success: function (data) {
                     console.log(data);
                     var sunsetTimeUtc = new Date(data);
-                    console.log(sunsetTimeUtc);
                     var secondsToToSunset = (sunsetTimeUtc - new Date())/1000;
                     var HmsToSunset = secondsToHms(Math.abs(secondsToToSunset));
-                    console.log(HmsToSunset);
-                    document.getElementById('timeToSunset').innerHTML = HmsToSunset;
+                    sunsetHours = HmsToSunset[0];
+                    sunsetMinutes = HmsToSunset[1];
+                    sunsetSeconds = HmsToSunset[2];
+                    document.getElementById('sunsetHours').innerHTML = sunsetHours;
+                    document.getElementById('sunsetMinutes').innerHTML = sunsetMinutes;
+                    document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
                 },
                 error: function (xhr, status, error) {
                     console.log("fuck");
@@ -83,10 +91,10 @@
             var m = Math.floor(d % 3600 / 60);
             var s = Math.floor(d % 3600 % 60);
 
-            var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-            var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
-            var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-            return hDisplay + mDisplay + sDisplay;
+            var hDisplay = h;
+            var mDisplay = m;
+            var sDisplay = s;
+            return [hDisplay, mDisplay, sDisplay];
         }
     </script>
 
