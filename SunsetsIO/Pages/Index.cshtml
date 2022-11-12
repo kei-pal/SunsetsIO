@@ -35,29 +35,65 @@
             <h5 id="sunsetTitle" class="time-desc"></h5>
         </div>
     </div>
+    <div>
+        <form class="rating">
+            <label>
+                <input type="radio" name="stars" value="1" />
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="2" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="3" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="4" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="5" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+        </form>
+    </div>
+    <div class="row" id="ratingFormDiv" style="display:none">
+        <div class="col-md-4">
+            <form method="post">
+                <input type="hidden" asp-for="Rating.Longitude" id="longitude" />
+                <input type="hidden" asp-for="Rating.Latitude" id="latitude" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="hidden" id="input-rating" asp-for="Rating.Stars" class="form-control" />
+                    <span asp-validation-for="Rating.Stars" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit" class="btn btn-primary" id="create" disabled />
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
      
 
 
 
 
-<div class="row" id="ratingFormDiv" style="display:none">
-    <div class="col-md-4">
-        <form method="post">
-            <input type="hidden" asp-for="Rating.Longitude" id="longitude" />
-            <input type="hidden" asp-for="Rating.Latitude" id="latitude" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Rating.Stars" class="control-label"></label>
-                <input asp-for="Rating.Stars" class="form-control" />
-                <span asp-validation-for="Rating.Stars" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" id="create" disabled />
-            </div>
-        </form>
-    </div>
-</div>
+
+
+
 
 @section Scripts {
     @{
@@ -71,6 +107,9 @@
         
         $(document).ready(function () {
             getLocation();
+            $(':radio').change(function () {
+                document.getElementById("input-rating").value = this.value;
+            });
         });
 
         function getLocation() {
@@ -100,20 +139,16 @@
                 dataType: "json",
                 data: JSON.stringify({ latitude: latitude, longitude: longitude }),
                 complete: function () {
-                    // set id loader to loaded class
                     $("#loader").attr("class", "loaded");
-                    $("#sunsetTimer").attr("class", "sunsetTimerShown");
                 },
                 success: function (data) {
                     var sunsetTimeUtc = new Date(data);
                     var secondsToToSunset = (sunsetTimeUtc - new Date())/1000;
                     if (Math.sign(secondsToToSunset) < 0) {
                         isPassedSunset = true;
-                        document.getElementById('sunsetTitle').innerHTML = "since sunset";
                         $("#ratingFormDiv").show();
                     }
                     else {
-                        document.getElementById('sunsetTitle').innerHTML = "until sunset";
                         isPassedSunset = false;
                     }
                     var HmsToSunset = secondsToHms(Math.abs(secondsToToSunset));
@@ -123,7 +158,6 @@
                     document.getElementById('sunsetHours').innerHTML = sunsetHours;
                     document.getElementById('sunsetMinutes').innerHTML = sunsetMinutes;
                     document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
-                    //$("#sunsetTimer").show();
                     setInterval(updateSunsetTime, 1000);
                 },
                 error: function (xhr, status, error) {
@@ -148,9 +182,6 @@
             if (!isPassedSunset) {
                 subtractSecondToSunsetTimer();
             }
-            else {
-                addSecondToSunsetTimer();
-            }
         }
 
         function subtractSecondToSunsetTimer() {
@@ -158,8 +189,7 @@
                 if (sunsetMinutes <= 0) {
                     if (sunsetHours <= 0) {
                         isPassedSunset = true;
-                        $("#sunsetTimer").show();
-                        document.getElementById('sunsetTitle').innerHTML = "Time since sunset:";
+                        $("#ratingFormDiv").show();
                     }
                     else {
                         sunsetHours--;
@@ -179,29 +209,6 @@
             }
             else {
                 sunsetSeconds--;
-                document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
-            }
-        }
-
-        function addSecondToSunsetTimer() {
-            if (sunsetSeconds >= 59) {
-                if (sunsetMinutes >= 59) {
-                    sunsetHours++;
-                    sunsetMinutes = 0;
-                    sunsetSeconds = 0;
-                    document.getElementById('sunsetHours').innerHTML = sunsetHours;
-                    document.getElementById('sunsetMinutes').innerHTML = sunsetMinutes;
-                    document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
-                }
-                else {
-                    sunsetMinutes++;
-                    sunsetSeconds = 0;
-                    document.getElementById('sunsetMinutes').innerHTML = sunsetMinutes;
-                    document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
-                }
-            }
-            else {
-                sunsetSeconds++;
                 document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
             }
         }
