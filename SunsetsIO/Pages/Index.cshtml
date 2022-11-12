@@ -7,7 +7,7 @@
 <div class="centered">
     <div class="parent">
         <h1>
-            <span>SunsetsI</span><span><div class="loader child"></div></span>
+            <span>SunsetsI</span><span><div id="loader" class="loader"></div></span>
         </h1>
     </div>
     <div  id="sunsetTimer" class="sunsetTimer">
@@ -34,10 +34,9 @@
         <div>
             <h5 id="sunsetTitle"></h5>
         </div>
-        
     </div>
 </div>
-    
+     
 
 
 
@@ -100,6 +99,11 @@
                 type: "POST",
                 dataType: "json",
                 data: JSON.stringify({ latitude: latitude, longitude: longitude }),
+                complete: function () {
+                    // set id loader to loaded class
+                    $("#loader").attr("class", "loaded");
+                    $("#sunsetTimer").attr("class", "sunsetTimer");
+                },
                 success: function (data) {
                     var sunsetTimeUtc = new Date(data);
                     var secondsToToSunset = (sunsetTimeUtc - new Date())/1000;

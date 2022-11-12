@@ -23,7 +23,6 @@ body {
     align-items: center;
     flex-direction: column;
     text-align: center;
-    vertical-align: middle;
     margin-top: 10em;
 }
 
@@ -35,6 +34,15 @@ body {
     animation: spin 1s linear infinite;
     height: 0.8em;
     width: 0.8em;
+}
+
+.loaded {
+    display: inline-block;
+    background-color: #ff6a00;
+    border-radius: 50%;
+    height: 0.8em;
+    width: 0.8em;
+    transition-duration: 2s;
 }
 
 @keyframes spin {
@@ -49,6 +57,7 @@ body {
 
 .parent {
     border-bottom: 5px solid black;
+    overflow: hidden;
 }
 
 .time-block {
@@ -72,4 +81,5 @@ body {
 
 .sunsetTimer {
     display: none;
+    transform: translateY(-100%)
 }
