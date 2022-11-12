@@ -43,8 +43,8 @@ body {
     border-top: 0.13em solid #3498db; /* Blue */
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    height: 0.7em;
-    width: 0.7em;
+    height: 0.75em;
+    width: 0.75em;
     animation: loading-symbol-to-sun 2s forwards;
     animation-timing-function: ease;
 }
@@ -67,11 +67,16 @@ body {
 }
 
 .time-block {
-    border: 1px solid black;
+    border: 2px solid #ff6a00;
+    color: #ff6a00;
     aspect-ratio: 1 / 1;
     height: 100%;
     text-align: center;
     vertical-align: middle;
+}
+
+.time-desc {
+    color: #ff6a00;
 }
 
 .timeRow {
