@@ -10,7 +10,7 @@
             <span>SunsetsI</span><span><div id="loader" class="loader"></div></span>
         </h1>
     </div>
-    <div  id="sunsetTimer" class="sunsetTimer">
+    <div  id="sunset-timer-div" class="sunset-timer-div-hidden">
         <div class ="timeRow">
         <div class="timeCol">
             <div class="time-block">
@@ -32,11 +32,11 @@
         </div>
         </div>
         <div>
-            <h5 id="sunsetTitle" class="time-desc"></h5>
+            <h5 class="time-desc">until sunset</h5>
         </div>
     </div>
-    <div>
-        <form class="rating">
+    <div class="rating-div-hidden" id="rating-div">
+        <form class="rating" id="rating">
             <label>
                 <input type="radio" name="stars" value="1" />
                 <span class="icon">★</span>
@@ -69,7 +69,7 @@
             </label>
         </form>
     </div>
-    <div class="row" id="ratingFormDiv" style="display:none">
+    <div id="submit-div" class="row submit-div-hidden">
         <div class="col-md-4">
             <form method="post">
                 <input type="hidden" asp-for="Rating.Longitude" id="longitude" />
@@ -80,7 +80,7 @@
                     <span asp-validation-for="Rating.Stars" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Submit" class="btn btn-primary" id="create" disabled />
+                    <input type="submit" value="Submit" class="btn btn-outline-dark" id="create" disabled />
                 </div>
             </form>
         </div>
@@ -143,13 +143,17 @@
                 },
                 success: function (data) {
                     var sunsetTimeUtc = new Date(data);
+                    console.log(sunsetTimeUtc);
                     var secondsToToSunset = (sunsetTimeUtc - new Date())/1000;
                     if (Math.sign(secondsToToSunset) < 0) {
                         isPassedSunset = true;
-                        $("#ratingFormDiv").show();
+                        $("#rating-div").attr("class", "rating-div");
+                        $("#submit-div").attr("class", "submit-div");
+                        
                     }
                     else {
                         isPassedSunset = false;
+                        $("#sunset-timer-div").attr("class", "sunset-timer-div");
                     }
                     var HmsToSunset = secondsToHms(Math.abs(secondsToToSunset));
                     sunsetHours = HmsToSunset[0];
@@ -182,14 +186,17 @@
             if (!isPassedSunset) {
                 subtractSecondToSunsetTimer();
             }
+            //TODO: stop timer
         }
 
         function subtractSecondToSunsetTimer() {
             if (sunsetSeconds <= 0) {
                 if (sunsetMinutes <= 0) {
-                    if (sunsetHours <= 0) {
+                    if (sunsetHours <= 1) {
+                        $("#sunset-timer-div").attr("class", "sunset-timer-div-hidden");
                         isPassedSunset = true;
-                        $("#ratingFormDiv").show();
+                        $("#rating-div").attr("class", "rating-div");
+                        $("#submit-div").attr("class", "submit-div");
                     }
                     else {
                         sunsetHours--;

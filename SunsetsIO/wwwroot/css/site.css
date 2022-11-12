@@ -64,6 +64,7 @@ body {
     background: white;
     overflow: hidden;
     width: 20em;
+    z-index: 1;
 }
 
 .time-block {
@@ -90,13 +91,28 @@ body {
     margin: 1em;
 }
 
-.sunsetTimer {
-    display: none;
+.sunset-timer-div-hidden {
+    height: 0;
+    opacity: 0;
     transform: translateY(-100%);
-    z-index:-999;
+    transition: transform 1s;
 }
 
-.sunsetTimerShown {
+.sunset-timer-div {
+    height: 100%;
+    opacity: 100%;
+    transform: translateY(0%);
+    transition: transform 1s;
+    transition-delay: 1s;
+}
+
+.starForm {
+    display: none;
+    transform: translateY(-100%);
+    z-index: -999;
+}
+
+.starFormShown {
     transform: translateY(-100%);
     animation: sunset-timer-dropdown 2s forwards;
     animation-timing-function: ease;
@@ -118,17 +134,6 @@ body {
         background-color: #ff6a00;
         border: 0;
         border-top: 0;
-    }
-}
-
-@keyframes sunset-timer-dropdown {
-    50% {
-        transform: translateY(-100%);
-    }
-
-    100% {
-        display: block;
-        transform: translateY(0%);
     }
 }
 
@@ -188,12 +193,44 @@ body {
     color: #000;
 }
 
-.rating:not(:hover) label input:checked ~ .icon,
-.rating:hover label:hover input ~ .icon {
-color: #09f;
-}
+    .rating:not(:hover) label input:checked ~ .icon,
+    .rating:hover label:hover input ~ .icon {
+        color: #ff6a00;
+    }
 
 .rating label input:focus:not(:checked) ~ .icon:last-child {
 color: #000;
 text-shadow: 0 0 5px #09f;
+}
+
+.rating-div-hidden {
+    height: 0;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: transform 1s;
+    transition-delay: 1s;
+}
+
+.rating-div {
+    height: 100%;
+    opacity: 100%;
+    transform: translateY(0%);
+    transition: transform 1s;
+    transition-delay: 1s;
+}
+
+.submit-div-hidden {
+    height: 0;
+    opacity: 0;
+    transform: translateY(-300%);
+    z-index: -999;
+}
+
+.submit-div {
+    height: 100%;
+    opacity: 100%;
+    transform: translateY(0%);
+    z-index: -999;
+    transition: transform 1s;
+    transition-delay: 1s;
 }
