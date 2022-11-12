@@ -102,7 +102,7 @@
                 complete: function () {
                     // set id loader to loaded class
                     $("#loader").attr("class", "loaded");
-                    $("#sunsetTimer").attr("class", "sunsetTimer");
+                    $("#sunsetTimer").attr("class", "sunsetTimerShown");
                 },
                 success: function (data) {
                     var sunsetTimeUtc = new Date(data);
@@ -123,7 +123,7 @@
                     document.getElementById('sunsetHours').innerHTML = sunsetHours;
                     document.getElementById('sunsetMinutes').innerHTML = sunsetMinutes;
                     document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
-                    $("#sunsetTimer").show();
+                    //$("#sunsetTimer").show();
                     setInterval(updateSunsetTime, 1000);
                 },
                 error: function (xhr, status, error) {

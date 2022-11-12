@@ -24,6 +24,7 @@ body {
     flex-direction: column;
     text-align: center;
     margin-top: 10em;
+    overflow: hidden;
 }
 
 .loader {
@@ -38,11 +39,13 @@ body {
 
 .loaded {
     display: inline-block;
-    background-color: #ff6a00;
+    border: 0.13em solid #f3f3f3; /* Light grey */
+    border-top: 0.13em solid #3498db; /* Blue */
     border-radius: 50%;
+    animation: spin 1s linear infinite;
     height: 0.8em;
     width: 0.8em;
-    transition-duration: 2s;
+    animation: loading-symbol-to-sun 2s forwards;
 }
 
 @keyframes spin {
@@ -57,6 +60,7 @@ body {
 
 .parent {
     border-bottom: 5px solid black;
+    background: white;
     overflow: hidden;
 }
 
@@ -81,5 +85,39 @@ body {
 
 .sunsetTimer {
     display: none;
-    transform: translateY(-100%)
+    transform: translateY(-100%);
+}
+
+.sunsetTimerShown {
+    transform: translateY(-100%);
+    animation: sunset-timer-dropdown 2s forwards;
+}
+
+
+@keyframes loading-symbol-to-sun {
+
+    50% {
+        transform: translateY(200%);
+        border: 0px;
+        border-top: 0px;
+        background-color: transparent;
+    }
+
+    100% {
+        transform: translateY(0%);
+        background-color: #ff6a00;
+        border: 0;
+        border-top: 0;
+    }
+}
+
+@keyframes sunset-timer-dropdown {
+    50% {
+        transform: translateY(-100%);
+    }
+
+    100% {
+        display: block;
+        transform: translateY(0%);
+    }
 }
