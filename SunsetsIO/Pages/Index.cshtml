@@ -4,6 +4,8 @@
     ViewData["Title"] = "Home page";
 }
 
+<div id="timeToSunset" ></div>
+
 <div class="row">
     <div class="col-md-4">
         <form method="post">
@@ -65,9 +67,8 @@
                 data: JSON.stringify({ latitude: latitude, longitude: longitude }),
                 success: function (data) {
                     console.log(data);
-                    //var sunsetTime = data.results.sunset;
-                    //var sunsetTimeUtc = new Date(sunsetTime).toUTCString();
-                    //document.getElementById("Rating_DateTimeRatedUtc").value = sunsetTimeUtc;
+                    var sunsetTimeUtc = new Date(data);
+                    document.getElementById('timeToSunset').innerHTML = sunsetTimeUtc.toLocaleTimeString();
                 },
                 error: function (xhr, status, error) {
                     console.log("fuck");

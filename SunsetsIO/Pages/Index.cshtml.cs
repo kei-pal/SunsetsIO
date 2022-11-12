@@ -71,9 +71,9 @@ namespace SunsetsIO.Pages
             WeatherForecastController controller = new(_context, _config);
             var localWeather = await controller.GetLocalWeather(ajaxIn.Latitude, ajaxIn.Longitude);
 
-            var sunsetOffset = localWeather.SunsetUtc.AddSeconds(localWeather.TimezoneOffsetSecs);
+            var sunsetUtc = localWeather.SunsetUtc;
 
-            return new JsonResult(sunsetOffset);
+            return new JsonResult(sunsetUtc);
         }
 
         [BindProperty]
