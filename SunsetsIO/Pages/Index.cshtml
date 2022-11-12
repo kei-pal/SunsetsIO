@@ -3,11 +3,16 @@
 @{
     ViewData["Title"] = "Home page";
 }
+<div class="loader"></div>
+<div class="centered">
+<div id="sunsetTimer" style="display:none">
+    <h5 id="sunsetTitle"></h5>
+    <p>
+        <span id="sunsetHours" style="border: 1px solid black"></span>h:<span id="sunsetMinutes" style="border: 1px solid black"></span>m:<span id="sunsetSeconds" style="border: 1px solid black"></span>s
+    </p>
+</div>
 
 <div class="row" id="ratingFormDiv" style="display:none">
-    <p>
-        <span id="sunsetHours" style="border: 1px solid black"></span>:<span id="sunsetMinutes" style="border: 1px solid black"></span>:<span id="sunsetSeconds" style="border: 1px solid black"></span>
-    </p>
     <div class="col-md-4">
         <form method="post">
             <input type="hidden" asp-for="Rating.Longitude" id="longitude" />
@@ -24,6 +29,7 @@
         </form>
     </div>
 </div>
+</div>
 
 @section Scripts {
     @{
@@ -33,6 +39,7 @@
         var sunsetHours;
         var sunsetMinutes;
         var sunsetSeconds;
+        var isPassedSunset;
         
         $(document).ready(function () {
             getLocation();
@@ -64,13 +71,18 @@
                 type: "POST",
                 dataType: "json",
                 data: JSON.stringify({ latitude: latitude, longitude: longitude }),
-                complete: function(){
-                    $("#ratingFormDiv").show();
-                },
                 success: function (data) {
-                    console.log(data);
                     var sunsetTimeUtc = new Date(data);
                     var secondsToToSunset = (sunsetTimeUtc - new Date())/1000;
+                    if (Math.sign(secondsToToSunset) < 0) {
+                        isPassedSunset = true;
+                        document.getElementById('sunsetTitle').innerHTML = "Time since sunset";
+                        $("#ratingFormDiv").show();
+                    }
+                    else {
+                        document.getElementById('sunsetTitle').innerHTML = "Time to sunset";
+                        isPassedSunset = false;
+                    }
                     var HmsToSunset = secondsToHms(Math.abs(secondsToToSunset));
                     sunsetHours = HmsToSunset[0];
                     sunsetMinutes = HmsToSunset[1];
@@ -78,6 +90,8 @@
                     document.getElementById('sunsetHours').innerHTML = sunsetHours;
                     document.getElementById('sunsetMinutes').innerHTML = sunsetMinutes;
                     document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
+                    $("#sunsetTimer").show();
+                    setInterval(updateSunsetTime, 1000);
                 },
                 error: function (xhr, status, error) {
                     console.log("fuck");
@@ -95,6 +109,68 @@
             var mDisplay = m;
             var sDisplay = s;
             return [hDisplay, mDisplay, sDisplay];
+        }
+
+        function updateSunsetTime() {
+            if (!isPassedSunset) {
+                subtractSecondToSunsetTimer();
+            }
+            else {
+                addSecondToSunsetTimer();
+            }
+        }
+
+        function subtractSecondToSunsetTimer() {
+            if (sunsetSeconds <= 0) {
+                if (sunsetMinutes <= 0) {
+                    if (sunsetHours <= 0) {
+                        isPassedSunset = true;
+                        $("#sunsetTimer").show();
+                        document.getElementById('sunsetTitle').innerHTML = "Time since sunset:";
+                    }
+                    else {
+                        sunsetHours--;
+                        sunsetMinutes = 59;
+                        sunsetSeconds = 59;
+                        document.getElementById('sunsetHours').innerHTML = sunsetHours;
+                        document.getElementById('sunsetMinutes').innerHTML = sunsetMinutes;
+                        document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
+                    }
+                }
+                else {
+                    sunsetMinutes--;
+                    sunsetSeconds = 59;
+                    document.getElementById('sunsetMinutes').innerHTML = sunsetMinutes;
+                    document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
+                }
+            }
+            else {
+                sunsetSeconds--;
+                document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
+            }
+        }
+
+        function addSecondToSunsetTimer() {
+            if (sunsetSeconds >= 59) {
+                if (sunsetMinutes >= 59) {
+                    sunsetHours++;
+                    sunsetMinutes = 0;
+                    sunsetSeconds = 0;
+                    document.getElementById('sunsetHours').innerHTML = sunsetHours;
+                    document.getElementById('sunsetMinutes').innerHTML = sunsetMinutes;
+                    document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
+                }
+                else {
+                    sunsetMinutes++;
+                    sunsetSeconds = 0;
+                    document.getElementById('sunsetMinutes').innerHTML = sunsetMinutes;
+                    document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
+                }
+            }
+            else {
+                sunsetSeconds++;
+                document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
+            }
         }
     </script>
 
