@@ -143,8 +143,14 @@
                 },
                 success: function (data) {
                     var sunsetTimeUtc = new Date(data);
-                    console.log(sunsetTimeUtc);
                     var secondsToToSunset = (sunsetTimeUtc - new Date())/1000;
+                    var HmsToSunset = secondsToHms(Math.abs(secondsToToSunset));
+                    sunsetHours = HmsToSunset[0];
+                    sunsetMinutes = HmsToSunset[1];
+                    sunsetSeconds = HmsToSunset[2];
+                    document.getElementById('sunsetHours').innerHTML = sunsetHours;
+                    document.getElementById('sunsetMinutes').innerHTML = sunsetMinutes;
+                    document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
                     if (Math.sign(secondsToToSunset) < 0) {
                         isPassedSunset = true;
                         $("#rating-div").attr("class", "rating-div");
@@ -155,13 +161,6 @@
                         isPassedSunset = false;
                         $("#sunset-timer-div").attr("class", "sunset-timer-div");
                     }
-                    var HmsToSunset = secondsToHms(Math.abs(secondsToToSunset));
-                    sunsetHours = HmsToSunset[0];
-                    sunsetMinutes = HmsToSunset[1];
-                    sunsetSeconds = HmsToSunset[2];
-                    document.getElementById('sunsetHours').innerHTML = sunsetHours;
-                    document.getElementById('sunsetMinutes').innerHTML = sunsetMinutes;
-                    document.getElementById('sunsetSeconds').innerHTML = sunsetSeconds;
                     setInterval(updateSunsetTime, 1000);
                 },
                 error: function (xhr, status, error) {
@@ -192,7 +191,7 @@
         function subtractSecondToSunsetTimer() {
             if (sunsetSeconds <= 0) {
                 if (sunsetMinutes <= 0) {
-                    if (sunsetHours <= 1) {
+                    if (sunsetHours <= 0) {
                         $("#sunset-timer-div").attr("class", "sunset-timer-div-hidden");
                         isPassedSunset = true;
                         $("#rating-div").attr("class", "rating-div");
