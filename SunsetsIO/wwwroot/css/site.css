@@ -223,14 +223,12 @@ text-shadow: 0 0 5px #09f;
     height: 0;
     opacity: 0;
     transform: translateY(-300%);
-    z-index: -999;
 }
 
 .submit-div {
     height: 100%;
     opacity: 100%;
     transform: translateY(0%);
-    z-index: -999;
     transition: transform 1s;
     transition-delay: 1s;
 }
